@@ -27,7 +27,7 @@
 #define FIGTREE_NO_ANN 
 
 #include "figtree.h"
-#include "base/Matrix.hpp"
+#include "base/matrix.hpp"
 
 namespace cpd
 {
@@ -39,9 +39,10 @@ namespace cpd
         int ifgtTruncMethod = FIGTREE_TRUNC_CLUSTER,
         int verbose = 0)
     {
-        typename MatrixType<double, D>::MatrixD x_r = x.cast<double>();
-        typename MatrixType<double, D>::MatrixD y_r = y.cast<double>();
-        typename MatrixType<double, D>::Matrix q_r = q.cast<double>().transpose();
+        // very strange usage...
+        typename MatrixType<double, D>::MatrixD x_r = x.template cast<double>();
+        typename MatrixType<double, D>::MatrixD y_r = y.template cast<double>();
+        typename MatrixType<double, D>::Matrix q_r = q.template cast<double>().transpose();
 
         int d = D;
         int N = x_r.rows();
@@ -57,7 +58,7 @@ namespace cpd
 
         figtree(d, N, M, W, X, h, Q, Y, epsilon, G.data(), evalMethod, ifgtParamMethod, ifgtTruncMethod, verbose);
 
-        TMatrix g = G.cast<T>().transpose();
+        TMatrix g = G.template cast<T>().transpose();
 
         return g;
     }

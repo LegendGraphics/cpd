@@ -59,19 +59,6 @@ namespace cpd
     };
 
 
-
-    template <typename T, int D>
-    void lr_approximate(const TMatrix& G, TMatrix& Q, TMatrix& S, int K, size_t lr_maxitr)
-    {
-        typename Eigen::EigenSolver<TMatrix> es;
-        es.setMaxIterations(lr_maxitr*G.rows());
-        es.compute(G);
-
-        const typename EigenType<T, D>::EigenvalueType& eigen_values = es.eigenvalues();
-        const typename EigenType<T, D>::EigenvectorsType& eigen_vectors = es.eigenvectors();	
-        k_extract<T, D>(eigen_values, eigen_vectors, Q, S, K);
-    }
-
     template <typename T, int D>
     void k_extract(const typename EigenType<T, D>::EigenvalueType& eigen_values, 
         const typename EigenType<T, D>::EigenvectorsType& eigen_vectors, 
@@ -79,12 +66,12 @@ namespace cpd
     {
         size_t eigen_num = eigen_values.rows();
 
-        typename std::vector<typename EigenValue<T> > ev;
+        std::vector<EigenValue<T> > ev;
 
         for (size_t i = 0; i < eigen_num; i ++)
         {
-            typename std::complex<T> cv = eigen_values(i);
-            typename EigenValue<T> i_ev(cv.real(), i);
+            std::complex<T> cv = eigen_values(i);
+            EigenValue<T> i_ev(cv.real(), i);
             ev.push_back(i_ev);
         }
 
@@ -106,6 +93,21 @@ namespace cpd
 
         S = s.asDiagonal();
     }
+    
+
+    template <typename T, int D>
+    void lr_approximate(const TMatrix& G, TMatrix& Q, TMatrix& S, int K, size_t lr_maxitr)
+    {
+        typename Eigen::EigenSolver<TMatrix> es;
+        es.setMaxIterations(lr_maxitr*G.rows());
+        es.compute(G);
+
+        const typename EigenType<T, D>::EigenvalueType& eigen_values = es.eigenvalues();
+        const typename EigenType<T, D>::EigenvectorsType& eigen_vectors = es.eigenvectors();	
+        k_extract<T, D>(eigen_values, eigen_vectors, Q, S, K);
+    }
+
+    
 
 }
 

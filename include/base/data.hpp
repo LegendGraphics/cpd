@@ -38,7 +38,7 @@ namespace cpd
         TMatrixD& model, TMatrixD& data)
     {
         // read files and fill the model and data matrices
-        std::fstream fin_m(model_file, std::ios_base::in), fin_d(data_file, std::ios_base::in);
+        std::fstream fin_m(model_file.c_str(), std::ios_base::in), fin_d(data_file.c_str(), std::ios_base::in);
         
         if (!fin_m || !fin_d)
         {
@@ -51,7 +51,7 @@ namespace cpd
         size_t i = 0, j = 0;
         while (fin_m >> tmp)
         {
-            m_values.push(tmp);		
+            m_values.push(tmp);
         }
 
         std::queue<T> d_values;
